@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Repository — Privacy Policy</title>
+
+    <style>
+        body {
+            background-color: #000;
+            color: #0ed145;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 30px 20px;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #0ed145;
+            margin: 24px 0;
+        }
+
+        a {
+            color: #55aaff;
+        }
+
+        a:focus-visible {
+            outline: 2px solid #0ed145;
+            outline-offset: 4px;
+        }
+
+        footer {
+            margin-top: 40px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        /* Rendered markdown content is left-aligned for readability,
+           while headers/nav stay centered to match the site style. */
+        #content {
+            text-align: left;
+        }
+
+        #content h1 {
+            text-align: center;
+            font-size: 1.6em;
+        }
+
+        #content h2 {
+            border-bottom: 1px solid #0ed145;
+            padding-bottom: 6px;
+            margin-top: 32px;
+        }
+
+        #content h3 {
+            color: #0ed145;
+            margin-top: 24px;
+        }
+
+        #content p,
+        #content li {
+            color: #c9ffd8;
+            line-height: 1.6;
+        }
+
+        #content em {
+            display: block;
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        #content ul,
+        #content ol {
+            padding-left: 24px;
+        }
+
+        #content code {
+            background: #0a0a0a;
+            border: 1px solid #0ed145;
+            padding: 1px 5px;
+            border-radius: 3px;
+            color: #0ed145;
+        }
+
+        #status {
+            color: #999;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <header>
+            <h1>Nova Repository</h1>
+            <nav><a href="index.html">&larr; Back to home</a></nav>
+            <hr>
+        </header>
+
+        <section id="content">
+            <p id="status">Loading privacy.md&hellip;</p>
+        </section>
+
+        <footer>
+            <p>Nova Repository</p>
+        </footer>
+    </main>
+
+    <script>
+        // Minimal Markdown renderer — headings, bold/italic, links,
+        // lists, hr, paragraphs. No external dependencies.
+        function renderMarkdown(md) {
+            const escapeHtml = (s) =>
+                s.replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;");
+
+            const inline = (text) => {
+                let t = escapeHtml(text);
+                t = t.replace(/`([^`]+)`/g, "<code>$1</code>");
+                t = t.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+                t = t.replace(/\*([^*]+)\*/g, "<em-inline>$1</em-inline>");
+                t = t.replace(/_([^_]+)_/g, "<em-inline>$1</em-inline>");
+                t = t.replace(/<em-inline>/g, "<em>").replace(/<\/em-inline>/g, "</em>");
+                t = t.replace(/\[([^\]]+)\]\(([^)]+)\)/g,
+                    '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+                return t;
+            };
+
+            const lines = md.replace(/\r\n/g, "\n").split("\n");
+            let html = "";
+            let listOpen = null; // "ul" | "ol" | null
+
+            const closeList = () => {
+                if (listOpen) {
+                    html += `</${listOpen}>`;
+                    listOpen = null;
+                }
+            };
+
+            for (let raw of lines) {
+                const line = raw.trimEnd();
+
+                if (/^\s*$/.test(line)) {
+                    closeList();
+                    continue;
+                }
+                if (/^---+$/.test(line.trim())) {
+                    closeList();
+                    html += "<hr>";
+                    continue;
+                }
+                let m;
+                if ((m = line.match(/^(#{1,6})\s+(.*)$/))) {
+                    closeList();
+                    const level = m[1].length;
+                    html += `<h${level}>${inline(m[2])}</h${level}>`;
+                    continue;
+                }
+                if ((m = line.match(/^\s*[-*]\s+(.*)$/))) {
+                    if (listOpen !== "ul") {
+                        closeList();
+                        html += "<ul>";
+                        listOpen = "ul";
+                    }
+                    html += `<li>${inline(m[1])}</li>`;
+                    continue;
+                }
+                if ((m = line.match(/^\s*\d+\.\s+(.*)$/))) {
+                    if (listOpen !== "ol") {
+                        closeList();
+                        html += "<ol>";
+                        listOpen = "ol";
+                    }
+                    html += `<li>${inline(m[1])}</li>`;
+                    continue;
+                }
+                closeList();
+                html += `<p>${inline(line)}</p>`;
+            }
+            closeList();
+            return html;
+        }
+
+        const contentEl = document.getElementById("content");
+
+        fetch("privacy.md")
+            .then((res) => {
+                if (!res.ok) throw new Error("HTTP " + res.status);
+                return res.text();
+            })
+            .then((md) => {
+                contentEl.innerHTML = renderMarkdown(md);
+            })
+            .catch((err) => {
+                contentEl.innerHTML =
+                    '<p id="status">Could not load privacy.md (' +
+                    (err && err.message ? err.message : "fetch failed") +
+                    "). If you're opening this file directly from disk, " +
+                    "serve the folder over HTTP instead " +
+                    "(e.g. <code>python3 -m http.server</code>) — browsers " +
+                    "block local file fetches for security reasons.</p>";
+            });
+    </script>
+</body>
+</html>
