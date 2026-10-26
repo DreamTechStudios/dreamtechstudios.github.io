@@ -1,39 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<script src=""></script>
-<meta charset="UTF-8"> 
-<title>Nova Repository</title>
-<script>
-function downloadhen()
-{
-	window.location.href = '';
-}
-function downloadhenD()
-{
-	window.location.href = '';
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Repository</title>
 
-</script>
+    <style>
+        body {
+            background-color: #000;
+            color: #0ed145;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 30px 20px;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #0ed145;
+            margin: 24px 0;
+        }
+
+        a {
+            color: #55aaff;
+        }
+
+        a:focus-visible {
+            outline: 2px solid #0ed145;
+            outline-offset: 4px;
+        }
+
+        footer {
+            margin-top: 40px;
+            color: #999;
+            font-size: 14px;
+        }
+    </style>
 </head>
-	<body id="bodyId" style="background-color:#000000" onload="javascript:downloadhen()">
-	<div id="headerId" style="color:#0ed145">
-	<h1>Nova Repository</h1>
-	<span style="color:#000000"></span><hr>
-	<h3>Supports Nova appalachians and higher</h3>
-	<h2><br>Vist Nova-os.com for more details<br></font></h2>
-	<span style="color:#0055AA"><h3>INFO: Works on Debian too</font></h3><br>
-	<hr></div>
-	<p><button id="btnROP" type="button" onclick="initROP(true);" autofocus>Go to Nova website</button> | Auto-Close Browser <input type="checkbox" id="auto_close" name="aclose" checked="checked" onclick="autoclose();"/><span id="dex_txt" style="visibility:hidden"> | DEX mode<input type="checkbox" id="dex" name="DEX" disabled="" onclick="dex();"/> * If you check the DEX Mode box and do not get an alert, reload browser or refresh page, or enabling HEN will freeze!</span></p>
-	<p><button id="btnTrigger" disabled="" type="button" onclick="triggerX();">Update</button><span id="reset" style="visibility:hidden"> | <button id="btnReset" type="button" onclick="disable_trigger();">Reset</button></span></p>
-	<div id="result" style="color:#CC2010"></div><br>
-	<div id="log"></div>
-	<div id="exploit" ></div>
-	<div id="trigger"></div>
-	<div id="footer"></div>
-	<script>
-		writeEnvInfo();
-		ps3chk();
-	</script>
-	</body>
+
+<body>
+    <main>
+        <header>
+            <h1>Nova Repository</h1>
+            <hr>
+        </header>
+
+        <section>
+            <h2>Welcome to Nova Repository</h2>
+
+            <p>
+                Visit the official Nova website for more information.
+            </p>
+
+            <p>
+                <a href="https://nova-os.com"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    Visit Nova-os.com
+                </a>
+            </p>
+
+            <hr>
+
+            <h3>Compatibility Information</h3>
+            <p>See the official website for current compatibility details.</p>
+        </section>
+
+        <footer>
+            <p>Nova Repository</p>
+        </footer>
+    </main>
+</body>
 </html>
